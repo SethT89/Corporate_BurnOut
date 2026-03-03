@@ -816,6 +816,70 @@ function drawObstacle(obs) {
   }
 }
 
+// ─── WING DRAWING ────────────────────────────────────────────────────────────
+function drawWingShape(ctx, sx, sy, lift) {
+  // Attachment point: right edge of wing area, middle of brain height
+  const ax = sx + Math.round(SPRITE_W * 0.47) + 2;
+  const ay = sy + SPRITE_H * 0.42;
+
+  ctx.save();
+
+  // --- Upper feather (large, main wing blade) ---
+  ctx.beginPath();
+  ctx.moveTo(ax, ay - 4);
+  ctx.bezierCurveTo(
+    ax - 14, ay - 10 - lift * 0.9,
+    ax - 32, ay - 16 - lift,
+    ax - 50, ay - 12 - lift
+  );
+  ctx.bezierCurveTo(
+    ax - 34, ay - 6 - lift * 0.5,
+    ax - 16, ay,
+    ax, ay + 10
+  );
+  ctx.closePath();
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fill();
+  ctx.strokeStyle = '#C8A0B8';
+  ctx.lineWidth = 0.8;
+  ctx.stroke();
+
+  // --- Lower feather (slightly behind, pinkish) ---
+  ctx.beginPath();
+  ctx.moveTo(ax, ay + 6);
+  ctx.bezierCurveTo(
+    ax - 10, ay + 2 - lift * 0.4,
+    ax - 26, ay + 4 - lift * 0.55,
+    ax - 38, ay + 10 - lift * 0.6
+  );
+  ctx.bezierCurveTo(
+    ax - 24, ay + 13 - lift * 0.2,
+    ax - 10, ay + 16,
+    ax, ay + 20
+  );
+  ctx.closePath();
+  ctx.fillStyle = '#FFD4E8';
+  ctx.fill();
+  ctx.strokeStyle = '#D06080';
+  ctx.lineWidth = 0.7;
+  ctx.stroke();
+
+  // --- Feather quill lines on upper feather ---
+  ctx.strokeStyle = 'rgba(180,140,170,0.6)';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i < 5; i++) {
+    const t = i / 4;
+    const fx = ax - 8 - t * 36;
+    const fy = ay - 6 - lift * (0.5 + t * 0.5) + t * 4;
+    ctx.beginPath();
+    ctx.moveTo(fx, fy);
+    ctx.lineTo(fx - 4, fy - 5 - lift * 0.15 * (1 - t));
+    ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
 // ─── BRAIN DRAWING ────────────────────────────────────────────────────────────
 function drawBrain(bx, by, vel, flapT, sweat) {
   if (!BRAIN_IMG.complete) return;
@@ -844,24 +908,18 @@ function drawBrain(bx, by, vel, flapT, sweat) {
   ctx.rotate(angle);
   ctx.translate(-brainCX, -brainCY);
 
-  // Draw the wing portion lifted (top-left ~45% of sprite width, full height)
-  // Wing region in sprite: src x 0..144, src y 0..145 (natural px)
   const wingDrawW = Math.round(SPRITE_W * 0.47);
   const wingDrawH = SPRITE_H;
   const wingSrcW = Math.round(320 * 0.47);
-  ctx.drawImage(
-    BRAIN_IMG,
-    0, 0, wingSrcW, 145,          // source rect (natural px)
-    sx, sy - wingLift,             // dest: lifted on flap
-    wingDrawW, wingDrawH
-  );
-
-  // Draw the brain body + right wing (right 65% of sprite) — never lifted
   const bodyDrawX = sx + wingDrawW;
-  const bodySrcX = wingSrcW;
+
+  // Draw the wing BEHIND the brain body
+  drawWingShape(ctx, sx, sy, wingLift);
+
+  // Draw the full brain sprite (intact, never split)
   ctx.drawImage(
     BRAIN_IMG,
-    bodySrcX, 0, 320 - bodySrcX, 145,
+    wingSrcW, 0, 320 - wingSrcW, 145,  // only the brain body portion of sprite
     bodyDrawX, sy,
     SPRITE_W - wingDrawW, wingDrawH
   );
