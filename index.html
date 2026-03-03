@@ -29,6 +29,8 @@
   #subscribe-overlay {
     display: none;
     position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 10;
     pointer-events: none;
     box-sizing: border-box;
@@ -83,12 +85,13 @@ function resize() {
 function positionOverlay() {
   const overlay = document.getElementById('subscribe-overlay');
   if (!overlay) return;
-  const r = canvas.getBoundingClientRect();
+  const scale = Math.min(window.innerWidth / LW, window.innerHeight / LH);
+  const canvasW = LW * scale;
+  const canvasH = LH * scale;
+  const canvasBottom = (window.innerHeight + canvasH) / 2;
   const iframeH = 315;
-  overlay.style.left   = r.left + 'px';
-  overlay.style.width  = r.width + 'px';
-  overlay.style.top    = (r.bottom - iframeH) + 'px';
-  overlay.style.height = iframeH + 'px';
+  overlay.style.width = canvasW + 'px';
+  overlay.style.top   = (canvasBottom - iframeH) + 'px';
 }
 
 resize();
