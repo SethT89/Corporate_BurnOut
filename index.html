@@ -19,6 +19,7 @@
   }
   #game-container {
     position: relative;
+    display: inline-block;
   }
   canvas {
     image-rendering: pixelated;
@@ -81,13 +82,8 @@ function resize() {
   const scale = Math.min(window.innerWidth / LW, window.innerHeight / LH);
   canvas.width = LW;
   canvas.height = LH;
-  const w = (LW * scale) + 'px';
-  const h = (LH * scale) + 'px';
-  canvas.style.width = w;
-  canvas.style.height = h;
-  const container = document.getElementById('game-container');
-  container.style.width = w;
-  container.style.height = h;
+  canvas.style.width = (LW * scale) + 'px';
+  canvas.style.height = (LH * scale) + 'px';
 }
 resize();
 window.addEventListener('resize', resize);
