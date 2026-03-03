@@ -28,28 +28,19 @@
   #subscribe-overlay {
     display: none;
     position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 420px;
-    padding: 0 12px 12px;
-    box-sizing: border-box;
     z-index: 10;
     pointer-events: none;
+    box-sizing: border-box;
   }
   #subscribe-overlay.visible {
     display: block;
     pointer-events: all;
   }
   #subscribe-inner {
-    background: #111111;
-    border: 1px solid #555555;
-    border-top: 2px solid #AA0000;
-    padding: 8px;
-    border-radius: 0 0 4px 4px;
-    display: flex;
-    justify-content: center;
+    width: 100%;
+    background: transparent;
+    border-top: 1px solid #AA0000;
+    box-sizing: border-box;
   }
   #subscribe-inner iframe {
     width: 100% !important;
@@ -57,6 +48,7 @@
     border: none;
     display: block;
     background: transparent;
+    margin: 0 auto;
   }
 </style>
 <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
@@ -68,7 +60,7 @@
     <iframe src="https://subscribe-forms.beehiiv.com/8bc9eb67-3d58-4fc9-a1ab-78ace138d7b5"
       data-test-id="beehiiv-embed"
       frameborder="0" scrolling="no"
-      style="width:100%;height:315px;margin:0;border-radius:0;background-color:transparent;box-shadow:none;">
+      style="width:100%;height:315px;margin:0 auto;display:block;border-radius:0;background-color:transparent;box-shadow:none;">
     </iframe>
   </div>
 </div>
@@ -87,6 +79,18 @@ function resize() {
 }
 resize();
 window.addEventListener('resize', resize);
+
+function positionOverlay() {
+  const overlay = document.getElementById('subscribe-overlay');
+  if (!overlay) return;
+  const r = canvas.getBoundingClientRect();
+  const iframeH = 315;
+  overlay.style.left   = r.left + 'px';
+  overlay.style.width  = r.width + 'px';
+  overlay.style.top    = (r.bottom - iframeH) + 'px';
+  overlay.style.height = iframeH + 'px';
+}
+window.addEventListener('resize', positionOverlay);
 
 // ─── COLORS ─────────────────────────────────────────────────────────────────
 const C = {
@@ -1192,7 +1196,7 @@ function loop(ts) {
       deathParticlesSpawned = false;
       if (score > hiScore) hiScore = score;
       deathMsg = GAME_OVER_MSGS[Math.floor(Math.random() * GAME_OVER_MSGS.length)];
-      document.getElementById('subscribe-overlay').classList.add('visible');
+      const _ov = document.getElementById('subscribe-overlay'); _ov.classList.add('visible'); positionOverlay();
     }
   }
 
