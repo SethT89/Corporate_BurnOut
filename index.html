@@ -58,6 +58,7 @@
     padding: 12px 20px;
     cursor: pointer;
     overflow: hidden;
+    touch-action: none;
   }
   .death-divider { color: #AA0000; font-size: 10px; margin: 4px 0; }
   #death-title { color: #FF4444; font-size: 14px; font-weight: bold; margin: 4px 0; }
@@ -155,6 +156,7 @@ function hideDeathScreen() {
 }
 
 document.getElementById('death-scroll').addEventListener('click', flap);
+document.getElementById('death-scroll').addEventListener('touchstart', e => { e.preventDefault(); flap(); }, { passive: false });
 
 // ─── COLORS ─────────────────────────────────────────────────────────────────
 const C = {
