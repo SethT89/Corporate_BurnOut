@@ -272,8 +272,8 @@ let particles = [];
 let speed, gapSize;
 
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
-const GRAVITY = 0.09;
-const FLAP = -3.2;
+const GRAVITY = 0.07;
+const FLAP = -3.6;
 const BIRD_W = 72, BIRD_H = 52;
 const COLL_PAD = 6; // collision forgiveness
 
@@ -289,7 +289,7 @@ function initGame() {
   score = 0;
   gameTime = 0;
   bgOffset = 0;
-  speed = 2.4;
+  speed = 2.8;
   gapSize = 210;
   nextObstacleX = LW + 80;
   countdownTimer = 3;
@@ -1153,19 +1153,16 @@ function loop(ts) {
     score = gameTime * 8;
 
     if (score < 400) {
-      // Easy warm-up: slow, wide gap
-      speed = 2.4 + (score / 400) * 0.3;         // 2.4 → 2.7 gradually
+      speed = 2.8 + (score / 400) * 0.4;          // 2.8 → 3.2 gradually
       gapSize = 210;
     } else if (score < 1000) {
-      // First spike at 400: noticeable jump in speed + gap shrinks
-      const t = (score - 400) / 600;             // 0→1 over scores 400–1000
-      speed = 2.9 + t * 0.6;                     // 2.9 → 3.5
-      gapSize = 190 - t * 35;                    // 190 → 155
+      const t = (score - 400) / 600;
+      speed = 3.4 + t * 0.7;                      // 3.4 → 4.1
+      gapSize = 190 - t * 35;                      // 190 → 155
     } else {
-      // Second spike at 1000: faster, tighter, but still survivable
-      const t = Math.min(1, (score - 1000) / 1000); // 0→1 over scores 1000–2000
-      speed = 3.7 + t * 1.0;                     // 3.7 → 4.7
-      gapSize = Math.max(130, 155 - t * 25);     // 155 → 130
+      const t = Math.min(1, (score - 1000) / 1000);
+      speed = 4.3 + t * 1.2;                      // 4.3 → 5.5
+      gapSize = Math.max(130, 155 - t * 25);       // 155 → 130
     }
 
     // Obstacle logic
