@@ -13,13 +13,10 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     font-family: 'Courier New', Courier, monospace;
     touch-action: none;
-  }
-  #game-container {
-    position: relative;
-    display: inline-block;
   }
   canvas {
     image-rendering: pixelated;
@@ -58,7 +55,6 @@
 <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
 </head>
 <body>
-<div id="game-container">
 <canvas id="c"></canvas>
 <div id="subscribe-overlay">
   <div id="subscribe-inner">
@@ -1229,6 +1225,5 @@ function loop(ts) {
 
 requestAnimationFrame(loop);
 </script>
-</div>
 </body>
 </html>
