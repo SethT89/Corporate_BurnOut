@@ -25,10 +25,53 @@
     max-width: 100vw;
     max-height: 100vh;
   }
+  #subscribe-overlay {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    padding: 0 12px 12px;
+    box-sizing: border-box;
+    z-index: 10;
+    pointer-events: none;
+  }
+  #subscribe-overlay.visible {
+    display: block;
+    pointer-events: all;
+  }
+  #subscribe-inner {
+    background: #0A0A0A;
+    border: 1px solid #555555;
+    border-top: 2px solid #AA0000;
+    padding: 8px;
+    border-radius: 0 0 4px 4px;
+    display: flex;
+    justify-content: center;
+  }
+  #subscribe-inner iframe {
+    width: 100% !important;
+    height: 80px !important;
+    border: none;
+    display: block;
+    background: transparent;
+  }
 </style>
+<script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
 </head>
 <body>
 <canvas id="c"></canvas>
+<div id="subscribe-overlay">
+  <div id="subscribe-inner">
+    <iframe src="https://subscribe-forms.beehiiv.com/8bc9eb67-3d58-4fc9-a1ab-78ace138d7b5"
+      data-test-id="beehiiv-embed"
+      frameborder="0" scrolling="no"
+      style="width:100%;height:80px;margin:0;border-radius:0;background-color:transparent;box-shadow:none;">
+    </iframe>
+  </div>
+</div>
 <script>
 // ─── CANVAS SETUP ───────────────────────────────────────────────────────────
 const canvas = document.getElementById('c');
@@ -165,6 +208,7 @@ const BIRD_W = 72, BIRD_H = 52;
 const COLL_PAD = 6; // collision forgiveness
 
 function initGame() {
+  document.getElementById('subscribe-overlay').classList.remove('visible');
   birdY = LH / 2 - 20;
   birdVel = 0;
   flapTimer = 0;
@@ -1148,6 +1192,7 @@ function loop(ts) {
       deathParticlesSpawned = false;
       if (score > hiScore) hiScore = score;
       deathMsg = GAME_OVER_MSGS[Math.floor(Math.random() * GAME_OVER_MSGS.length)];
+      document.getElementById('subscribe-overlay').classList.add('visible');
     }
   }
 
