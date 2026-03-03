@@ -31,10 +31,7 @@
   }
   #subscribe-overlay {
     display: none;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: fixed;
     z-index: 10;
     pointer-events: none;
     box-sizing: border-box;
@@ -84,7 +81,20 @@ function resize() {
   canvas.height = LH;
   canvas.style.width = (LW * scale) + 'px';
   canvas.style.height = (LH * scale) + 'px';
+  positionOverlay();
 }
+
+function positionOverlay() {
+  const overlay = document.getElementById('subscribe-overlay');
+  if (!overlay) return;
+  const r = canvas.getBoundingClientRect();
+  const iframeH = 315;
+  overlay.style.left   = r.left + 'px';
+  overlay.style.width  = r.width + 'px';
+  overlay.style.top    = (r.bottom - iframeH) + 'px';
+  overlay.style.height = iframeH + 'px';
+}
+
 resize();
 window.addEventListener('resize', resize);
 
@@ -1192,7 +1202,7 @@ function loop(ts) {
       deathParticlesSpawned = false;
       if (score > hiScore) hiScore = score;
       deathMsg = GAME_OVER_MSGS[Math.floor(Math.random() * GAME_OVER_MSGS.length)];
-      const _ov = document.getElementById('subscribe-overlay'); _ov.classList.add('visible');
+      const _ov = document.getElementById('subscribe-overlay'); _ov.classList.add('visible'); positionOverlay();
     }
   }
 
