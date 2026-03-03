@@ -17,6 +17,13 @@
     font-family: 'Courier New', Courier, monospace;
     touch-action: none;
   }
+  #game-container {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    max-width: 100vw;
+    max-height: 100vh;
+  }
   canvas {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
@@ -27,7 +34,10 @@
   }
   #subscribe-overlay {
     display: none;
-    position: fixed;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 10;
     pointer-events: none;
     box-sizing: border-box;
@@ -54,6 +64,7 @@
 <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
 </head>
 <body>
+<div id="game-container">
 <canvas id="c"></canvas>
 <div id="subscribe-overlay">
   <div id="subscribe-inner">
@@ -79,18 +90,6 @@ function resize() {
 }
 resize();
 window.addEventListener('resize', resize);
-
-function positionOverlay() {
-  const overlay = document.getElementById('subscribe-overlay');
-  if (!overlay) return;
-  const r = canvas.getBoundingClientRect();
-  const iframeH = 315;
-  overlay.style.left   = r.left + 'px';
-  overlay.style.width  = r.width + 'px';
-  overlay.style.top    = (r.bottom - iframeH) + 'px';
-  overlay.style.height = iframeH + 'px';
-}
-window.addEventListener('resize', positionOverlay);
 
 // ─── COLORS ─────────────────────────────────────────────────────────────────
 const C = {
@@ -1196,7 +1195,7 @@ function loop(ts) {
       deathParticlesSpawned = false;
       if (score > hiScore) hiScore = score;
       deathMsg = GAME_OVER_MSGS[Math.floor(Math.random() * GAME_OVER_MSGS.length)];
-      const _ov = document.getElementById('subscribe-overlay'); _ov.classList.add('visible'); positionOverlay();
+      const _ov = document.getElementById('subscribe-overlay'); _ov.classList.add('visible');
     }
   }
 
@@ -1223,5 +1222,6 @@ function loop(ts) {
 
 requestAnimationFrame(loop);
 </script>
+</div>
 </body>
 </html>
